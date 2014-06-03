@@ -82,7 +82,7 @@
           <item>
            <widget class="QRadioButton" name="radioButton_4">
             <property name="text">
-             <string>Template</string>
+             <string>Reference</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -128,7 +128,7 @@
           <item>
            <widget class="QRadioButton" name="radioButton_5">
             <property name="text">
-             <string>Template</string>
+             <string>Reference</string>
             </property>
            </widget>
           </item>
@@ -433,7 +433,7 @@
           <item>
            <widget class="QPushButton" name="btn_diff">
             <property name="text">
-             <string>Analyze</string>
+             <string>Compare</string>
             </property>
            </widget>
           </item>

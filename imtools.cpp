@@ -15,6 +15,12 @@ imtools::imtools(QWidget *parent)
 	connect(ui.btn_extract, SIGNAL(pressed()), this, SLOT(extract()));
 	connect(ui.btn_count, SIGNAL(pressed()), this, SLOT(count()));
 
+	connect(ui.opt_cpu, SIGNAL(clicked(bool)), this, SLOT(opt_cpu(bool)));
+	connect(ui.opt_ocl, SIGNAL(clicked(bool)), this, SLOT(opt_ocl(bool)));
+	connect(ui.opt_cuda, SIGNAL(clicked(bool)), this, SLOT(opt_cuda(bool)));
+	connect(ui.opt_bf, SIGNAL(clicked(bool)), this, SLOT(opt_bf(bool)));
+	connect(ui.opt_flann, SIGNAL(clicked(bool)), this, SLOT(opt_flann(bool)));
+
 	ui.txt_left->setAcceptDrops(true);
 	ui.txt_right->setAcceptDrops(true);
 	setAcceptDrops(true);
@@ -49,27 +55,27 @@ void imtools::count()
 
 void imtools::opt_cpu(bool checked)
 {
-	_sm = iu::speedup_default;
+	if(checked) _sm = iu::speedup_default;
 }
 
 void imtools::opt_ocl(bool checked)
 {
-	_sm = iu::speedup_use_ocl;
+	if (checked) _sm = iu::speedup_use_ocl;
 }
 
 void imtools::opt_cuda(bool checked)
 {
-	_sm = iu::speedup_use_cuda;
+	if (checked) _sm = iu::speedup_use_cuda;
 }
 
 void imtools::opt_bf(bool checked)
 {
-	_mm = iu::match_brute_force;
+	if (checked) _mm = iu::match_brute_force;
 }
 
 void imtools::opt_flann(bool checked)
 {
-	_mm = iu::match_flann;
+	if (checked) _mm = iu::match_flann;
 }
 
 void imtools::txt_left_changed(const QString& txt)
