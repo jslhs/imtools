@@ -10,8 +10,8 @@ int main(int argc, char *argv[])
 	imtools w;
 	w.show();
 
-	QStyle *style = QStyleFactory::create("fusion");
-	QApplication::setStyle(style);
+	//QStyle *style = QStyleFactory::create("fusion");
+	//QApplication::setStyle(style);
 
 	return a.exec();
 }
