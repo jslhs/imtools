@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>783</width>
-    <height>478</height>
+    <width>1024</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="font">
@@ -35,10 +35,10 @@
     <property name="spacing">
      <number>1</number>
     </property>
-    <item row="1" column="0">
+    <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_diff">
        <attribute name="title">
@@ -46,10 +46,22 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="spacing">
-         <number>1</number>
+         <number>2</number>
+        </property>
+        <property name="leftMargin">
+         <number>4</number>
+        </property>
+        <property name="topMargin">
+         <number>4</number>
+        </property>
+        <property name="rightMargin">
+         <number>4</number>
+        </property>
+        <property name="bottomMargin">
+         <number>4</number>
         </property>
         <item>
-         <widget class="QWidget" name="" native="true">
+         <widget class="QWidget" name="group_left" native="true">
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -57,11 +69,26 @@
            </size>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QLabel" name="label">
              <property name="minimumSize">
               <size>
-               <width>30</width>
+               <width>35</width>
                <height>0</height>
               </size>
              </property>
@@ -71,7 +98,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="txt_left"/>
+            <widget class="QLineEdit" name="txt_left">
+             <property name="text">
+              <string>Select a folder...</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QPushButton" name="btn_src_left">
@@ -84,6 +115,24 @@
              <property name="text">
               <string>...</string>
              </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="left_img_list">
+             <property name="minimumSize">
+              <size>
+               <width>300</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="currentText">
+              <string>Select...</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>Select...</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -100,7 +149,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="" native="true">
+         <widget class="QWidget" name="group_right" native="true">
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -108,14 +157,29 @@
            </size>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="spacing">
+            <number>2</number>
+           </property>
            <property name="sizeConstraint">
             <enum>QLayout::SetDefaultConstraint</enum>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="label_2">
              <property name="minimumSize">
               <size>
-               <width>30</width>
+               <width>35</width>
                <height>0</height>
               </size>
              </property>
@@ -125,41 +189,10 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="txt_right"/>
-           </item>
-           <item>
-            <widget class="QWidget" name="" native="true">
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>25</height>
-              </size>
+            <widget class="QLineEdit" name="txt_right">
+             <property name="text">
+              <string>Select a folder...</string>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_3">
-              <property name="topMargin">
-               <number>4</number>
-              </property>
-              <item>
-               <spacer name="horizontalSpacer">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QPushButton" name="btn_diff">
-                <property name="text">
-                 <string>Compare</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </widget>
            </item>
            <item>
@@ -173,6 +206,24 @@
              <property name="text">
               <string>...</string>
              </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="right_img_list">
+             <property name="minimumSize">
+              <size>
+               <width>300</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="currentText">
+              <string>Select...</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>Select...</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -213,34 +264,18 @@
             <widget class="QLabel" name="label_5">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>80</width>
                <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>100</width>
+               <width>80</width>
                <height>16777215</height>
               </size>
              </property>
              <property name="text">
               <string>Computing:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="opt_cpu">
-             <property name="minimumSize">
-              <size>
-               <width>100</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>CPU</string>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -257,6 +292,22 @@
              </property>
              <property name="checked">
               <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="opt_cpu">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>CPU</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -314,13 +365,13 @@
             <widget class="QLabel" name="label_9">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>80</width>
                <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>100</width>
+               <width>80</width>
                <height>16777215</height>
               </size>
              </property>
@@ -421,13 +472,13 @@
             <widget class="QLabel" name="label_6">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>80</width>
                <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>100</width>
+               <width>80</width>
                <height>16777215</height>
               </size>
              </property>
@@ -482,7 +533,21 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="widget_2" native="true"/>
+         <widget class="QScrollArea" name="result_view">
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1006</width>
+             <height>614</height>
+            </rect>
+           </property>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>

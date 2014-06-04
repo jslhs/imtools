@@ -37,6 +37,9 @@ protected:
 	virtual void dropEvent(QDropEvent *ev);
 
 private:
+	QStringList get_image_files(const QString &path);
+
+private:
 	Ui::imtoolsClass ui;
 	iu::speedup_method _sm;
 	iu::match_method _mm;
