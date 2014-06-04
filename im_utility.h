@@ -27,6 +27,7 @@ namespace iu
 		, key_match_threshold
 		, key_speedup
 		, key_match_method
+		, key_ocl_dev
 	};
 
 	enum speedup_method
@@ -46,6 +47,7 @@ namespace iu
 	typedef std::vector < key_point > key_points;
 	typedef std::vector < match > matches;
 	typedef std::map < parameter_key, parameter_value > parameters;
+	typedef std::vector<std::string> ocl_dev_list;
 
 	class im_utility
 	{
@@ -57,6 +59,8 @@ namespace iu
 		matches diff(const std::string &im_file1, const std::string &im_file2, const parameters &params, key_points *im1_kps = nullptr, key_points *im2_kps = nullptr);
 		void count_objs();
 		void extract_text();
+
+		static ocl_dev_list ocl_devs();
 
 	private:
 

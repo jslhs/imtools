@@ -11,6 +11,8 @@
 #include <memory>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QSignalMapper>
+#include <QLabel>
 
 class imtools : public QMainWindow
 {
@@ -34,6 +36,7 @@ public slots:
 	void extract();
 	void count();
 	void compare_done();
+	void ocl_dev_changed(int);
 
 signals:
 	void sig_compare_done();
@@ -46,7 +49,7 @@ private:
 	QStringList get_image_files(const QString &path);
 	void lock_ui(bool lock = true);
 	void compare();
-	void compare_proc();
+	void compare_proc(const std::string &left, const std::string &right, const iu::parameters &params);
 	
 private:
 	Ui::imtoolsClass ui;
@@ -55,7 +58,11 @@ private:
 	QStringList _left_imgs;
 	QStringList _right_imgs;
 	QImage _result_img;
+	QLabel _result_view;
 	QVector<std::shared_ptr<QWidget>> _dlgs;
+	QSignalMapper _signal_mapper;
+	QVector<QAction *> _ocl_dev_acts;
+	int _ocl_dev;
 };
 
 #endif // IMTOOLS_H

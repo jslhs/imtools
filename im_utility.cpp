@@ -216,4 +216,18 @@ namespace iu
 		return mt;
 	}
 
+	ocl_dev_list im_utility::ocl_devs()
+	{
+		ocl_dev_list devs;
+
+		cv::ocl::DevicesInfo info;
+		cv::ocl::getOpenCLDevices(info, cv::ocl::CVCL_DEVICE_TYPE_ALL);
+
+		for (auto &i : info)
+		{
+			devs.push_back(i->deviceName + ", " + i->deviceProfile);
+		}
+
+		return devs;
+	}
 }

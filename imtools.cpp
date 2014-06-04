@@ -1,11 +1,14 @@
 #include "imtools.h"
 #include <QMimeData>
 #include <QDir>
+#include <QImage>
+#include <QPainter>
 
 imtools::imtools(QWidget *parent)
 	: QMainWindow(parent)
 	, _sm(iu::speedup_use_ocl)
 	, _mm(iu::match_brute_force)
+	, _ocl_dev(0)
 {
 	ui.setupUi(this);
 
@@ -33,11 +36,37 @@ imtools::imtools(QWidget *parent)
 
 	ui.txt_left->setText(QDir::currentPath());
 	ui.txt_right->setText(QDir::currentPath());
+
+	auto devs = iu::im_utility::ocl_devs();
+	for (auto &dev : devs)
+	{
+		auto act = ui.menu_ocl_devs->addAction(QString(dev.c_str()));
+		act->setCheckable(true);
+		_signal_mapper.setMapping(act, _ocl_dev_acts.size());
+		connect(act, SIGNAL(triggered()), &_signal_mapper, SLOT(map()));
+		_ocl_dev_acts.push_back(act);
+	}
+
+	if (_ocl_dev_acts.size())
+		_ocl_dev_acts[0]->setChecked(true);
+	
+	connect(&_signal_mapper, SIGNAL(mapped(int)), this, SLOT(ocl_dev_changed(int)));
 }
 
 imtools::~imtools()
 {
 
+}
+
+void imtools::ocl_dev_changed(int index)
+{
+	for (int i = 0; i < _ocl_dev_acts.size(); i++)
+	{
+		auto act = _ocl_dev_acts[i];
+		act->setChecked(i == index);
+	}
+
+	_ocl_dev = index;
 }
 
 void imtools::lock_ui(bool lock)
@@ -72,17 +101,75 @@ void imtools::compare()
 	lock_ui();
 
 	// get parameters
+	int left_idx = ui.left_img_list->currentIndex();
+	int right_idx = ui.right_img_list->currentIndex();
+	if (!left_idx || !right_idx)
+	{
+		emit sig_compare_done();
+		return;
+	}
 
-	emit sig_compare_done();
+	//std::string left, right;
+	using namespace iu;
+	parameters params;
+
+	auto left = (ui.txt_left->text() + "/" + ui.left_img_list->itemText(left_idx)).toStdString();
+	auto right = (ui.txt_right->text() + "/" + ui.right_img_list->itemText(right_idx)).toStdString();
+	params[key_speedup] = speedup_use_ocl;
+	params[key_match_method] = _mm;
+
+	_result_view.setText("Analyzing, please wait...");
+	auto t = std::thread([&, left, right, params](){ compare_proc(left, right, params); });
+	t.detach();
 }
 
-void imtools::compare_proc()
+void imtools::compare_proc(const std::string &left, const std::string &right, const iu::parameters &params)
 {
+	using namespace iu;
+	im_utility u;
+	auto mt = u.diff(left, right, params);
+	QImage img1(QString(left.c_str()));
+	QImage img2(QString(right.c_str()));
+	QImage img(img1.width() + img2.width(), std::max(img1.height(), img2.height()), QImage::Format_ARGB32);
 
+	QPainter p(&img);
+
+	p.setRenderHint(QPainter::Antialiasing);
+	p.setRenderHint(QPainter::HighQualityAntialiasing);
+	p.drawImage(QPoint(0, 0), img1);
+	p.drawImage(QPoint(img1.width(), 0), img2);
+
+	QPen pen;
+	pen.setStyle(Qt::SolidLine);
+	pen.setWidth(2);
+
+	int color = 0;
+	for (auto &m : mt)
+	{
+		QColor c(color);
+		c.setAlpha(150);
+		pen.setColor(c);
+		p.setPen(pen);
+		auto pt1 = QPointF(m.pt1.x, m.pt1.y);
+		auto pt2 = QPointF(m.pt2.x + img1.width(), m.pt2.y);
+		QPainterPath path;
+		path.addEllipse(pt1, 5, 5);
+		path.addEllipse(pt2, 5, 5);
+		p.fillPath(path, QBrush(QColor(255, 0, 0, 75)));
+		p.drawLine(pt1, pt2);
+		p.drawEllipse(pt1, m.pt1.size, m.pt1.size);
+		p.drawEllipse(pt2, m.pt2.size, m.pt2.size);
+		color += 1024;
+	}
+
+	_result_img = img;
+	emit sig_compare_done();
 }
 
 void imtools::compare_done()
 {
+	_result_view.setPixmap(QPixmap::fromImage(_result_img));
+	ui.result_view->setWidget(&_result_view);
 	lock_ui(false);
 }
 
