@@ -40,7 +40,7 @@
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>150</height>
+        <height>120</height>
        </size>
       </property>
       <property name="currentIndex">
@@ -53,6 +53,9 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="spacing">
          <number>2</number>
+        </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
         </property>
         <property name="leftMargin">
          <number>4</number>
@@ -264,7 +267,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="radioButton">
+            <widget class="QRadioButton" name="opt_surf">
              <property name="minimumSize">
               <size>
                <width>100</width>
@@ -286,7 +289,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="radioButton_2">
+            <widget class="QRadioButton" name="opt_sift">
              <property name="minimumSize">
               <size>
                <width>100</width>
@@ -305,7 +308,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="radioButton_3">
+            <widget class="QRadioButton" name="opt_star">
              <property name="text">
               <string>STAR</string>
              </property>
@@ -396,28 +399,36 @@
                 </property>
                </spacer>
               </item>
+              <item>
+               <widget class="QComboBox" name="comboBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>100%</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Fit Width</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Fit Height</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
              </layout>
-             <zorder>label_6</zorder>
-             <zorder>opt_bf</zorder>
-             <zorder>opt_bf</zorder>
-             <zorder>opt_flann</zorder>
             </widget>
            </item>
           </layout>
          </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -442,7 +453,7 @@
          <number>4</number>
         </property>
         <item>
-         <widget class="QWidget" name="" native="true">
+         <widget class="QWidget" name="group_extractor" native="true">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -473,6 +484,12 @@
            </property>
            <item>
             <widget class="QLabel" name="label_3">
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="text">
               <string>Image:</string>
              </property>
@@ -533,7 +550,7 @@
          <number>4</number>
         </property>
         <item>
-         <widget class="QWidget" name="" native="true">
+         <widget class="QWidget" name="group_counter" native="true">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -564,6 +581,12 @@
            </property>
            <item>
             <widget class="QLabel" name="label_4">
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="text">
               <string>Image:</string>
              </property>
@@ -607,7 +630,33 @@
     </item>
     <item>
      <widget class="QWidget" name="view_opts" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout"/>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="title">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
     <item>
@@ -621,7 +670,7 @@
          <x>0</x>
          <y>0</y>
          <width>1022</width>
-         <height>593</height>
+         <height>612</height>
         </rect>
        </property>
       </widget>

@@ -37,6 +37,8 @@ public slots:
 	void count();
 	void compare_done();
 	void ocl_dev_changed(int);
+	void sel_left();
+	void sel_right();
 
 signals:
 	void sig_compare_done();
@@ -49,6 +51,7 @@ private:
 	QStringList get_image_files(const QString &path);
 	void lock_ui(bool lock = true);
 	void compare();
+	QString sel_folder();
 	void compare_proc(const std::string &left, const std::string &right, const iu::parameters &params);
 	
 private:

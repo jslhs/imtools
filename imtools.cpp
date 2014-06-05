@@ -3,6 +3,7 @@
 #include <QDir>
 #include <QImage>
 #include <QPainter>
+#include <QFileDialog>
 
 imtools::imtools(QWidget *parent)
 	: QMainWindow(parent)
@@ -30,6 +31,9 @@ imtools::imtools(QWidget *parent)
 
 	connect(this, SIGNAL(sig_compare_done()), this, SLOT(compare_done()), Qt::QueuedConnection);
 
+	connect(ui.btn_src_left, SIGNAL(pressed()), this, SLOT(sel_left()));
+	connect(ui.btn_src_right, SIGNAL(pressed()), this, SLOT(sel_right()));
+
 	//ui.txt_left->setAcceptDrops(true);
 	//ui.txt_right->setAcceptDrops(true);
 	setAcceptDrops(true);
@@ -56,6 +60,23 @@ imtools::imtools(QWidget *parent)
 imtools::~imtools()
 {
 
+}
+
+QString imtools::sel_folder()
+{
+	return QFileDialog::getExistingDirectory(this, "Choose Directory");
+}
+
+void imtools::sel_left()
+{
+	auto dir = sel_folder();
+	if(!dir.isEmpty()) ui.txt_left->setText(dir);
+}
+
+void imtools::sel_right()
+{
+	auto dir = sel_folder();
+	if (!dir.isEmpty()) ui.txt_right->setText(dir);
 }
 
 void imtools::ocl_dev_changed(int index)
@@ -100,6 +121,8 @@ void imtools::compare()
 {
 	lock_ui();
 
+	_result_img = QImage();
+
 	// get parameters
 	int left_idx = ui.left_img_list->currentIndex();
 	int right_idx = ui.right_img_list->currentIndex();
@@ -118,7 +141,7 @@ void imtools::compare()
 	params[key_speedup] = speedup_use_ocl;
 	params[key_match_method] = _mm;
 
-	_result_view.setText("Analyzing, please wait...");
+	ui.title->setText("Analyzing, please wait...");
 	auto t = std::thread([&, left, right, params](){ compare_proc(left, right, params); });
 	t.detach();
 }
