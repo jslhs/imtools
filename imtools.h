@@ -38,6 +38,9 @@ public slots:
 	void ocl_dev_changed(int);
 	void sel_left();
 	void sel_right();
+	void view_opt_changed(int index);
+	void opt_show_mp_changed();
+	void opt_show_kp_changed();
 
 signals:
 	void sig_compare_done();
@@ -45,6 +48,7 @@ signals:
 protected:
 	virtual void dragEnterEvent(QDragEnterEvent *ev);
 	virtual void dropEvent(QDropEvent *ev);
+	virtual void resizeEvent(QResizeEvent *ev);
 
 private:
 	QStringList get_image_files(const QString &path);
@@ -53,6 +57,14 @@ private:
 	QString sel_folder();
 	void compare_proc(const std::string &left, const std::string &right, const iu::parameters &params);
 	void show_compare_result();
+
+	enum view_options
+	{
+		view_show_all
+		, view_fit_width
+		, view_fit_height
+		, view_fit_both
+	};
 	
 private:
 	Ui::imtoolsClass ui;
@@ -60,7 +72,7 @@ private:
 	iu::match_method _mm;
 	QStringList _left_imgs;
 	QStringList _right_imgs;
-	//QImage _result_img;
+	QImage _result_img;
 	QLabel _result_view;
 	QVector<std::shared_ptr<QWidget>> _dlgs;
 	QSignalMapper _signal_mapper;
@@ -69,6 +81,7 @@ private:
 	QString _right_img_file;
 	int _ocl_dev;
 	iu::matches _mt;
+	
 };
 
 #endif // IMTOOLS_H

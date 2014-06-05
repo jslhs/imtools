@@ -400,21 +400,24 @@
                </spacer>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_2">
+               <widget class="QCheckBox" name="opt_show_kp">
                 <property name="text">
                  <string>Show Key Points</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox">
+               <widget class="QCheckBox" name="opt_show_mp">
                 <property name="text">
                  <string>Show Match Points</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox">
+               <widget class="QComboBox" name="view_opt_list">
                 <property name="minimumSize">
                  <size>
                   <width>100</width>
@@ -434,6 +437,11 @@
                 <item>
                  <property name="text">
                   <string>Fit Height</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Fit Both</string>
                  </property>
                 </item>
                </widget>
@@ -668,7 +676,7 @@
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
+      <widget class="QWidget" name="result_content_area">
        <property name="geometry">
         <rect>
          <x>0</x>

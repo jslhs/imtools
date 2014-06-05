@@ -4,6 +4,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QFileDialog>
+#include <QResizeEvent>
 
 imtools::imtools(QWidget *parent)
 	: QMainWindow(parent)
@@ -28,11 +29,15 @@ imtools::imtools(QWidget *parent)
 
 	connect(ui.left_img_list, SIGNAL(currentIndexChanged(int)), this, SLOT(left_sel_changed(int)));
 	connect(ui.right_img_list, SIGNAL(currentIndexChanged(int)), this, SLOT(right_sel_changed(int)));
+	connect(ui.view_opt_list, SIGNAL(currentIndexChanged(int)), this, SLOT(view_opt_changed(int)));
 
 	connect(this, SIGNAL(sig_compare_done()), this, SLOT(compare_done()), Qt::QueuedConnection);
 
 	connect(ui.btn_src_left, SIGNAL(pressed()), this, SLOT(sel_left()));
 	connect(ui.btn_src_right, SIGNAL(pressed()), this, SLOT(sel_right()));
+
+	connect(ui.opt_show_kp, SIGNAL(clicked()), this, SLOT(opt_show_kp_changed()));
+	connect(ui.opt_show_mp, SIGNAL(clicked()), this, SLOT(opt_show_mp_changed()));
 
 	//ui.txt_left->setAcceptDrops(true);
 	//ui.txt_right->setAcceptDrops(true);
@@ -113,6 +118,7 @@ void imtools::compare()
 	lock_ui();
 
 	_result_view.setPixmap(QPixmap());
+	_mt = iu::matches();
 
 	// get parameters
 	int left_idx = ui.left_img_list->currentIndex();
@@ -172,30 +178,56 @@ void imtools::show_compare_result()
 	p.drawImage(QPoint(0, 0), img1);
 	p.drawImage(QPoint(img1.width(), 0), img2);
 
-	QPen pen;
-	pen.setStyle(Qt::SolidLine);
-	pen.setWidth(2);
-
-	int color = 0;
-	for (auto &m : _mt)
+	if (ui.opt_show_mp->isChecked())
 	{
-		QColor c(color);
-		c.setAlpha(150);
-		pen.setColor(c);
-		p.setPen(pen);
-		auto pt1 = QPointF(m.pt1.x, m.pt1.y);
-		auto pt2 = QPointF(m.pt2.x + img1.width(), m.pt2.y);
-		QPainterPath path;
-		path.addEllipse(pt1, 5, 5);
-		path.addEllipse(pt2, 5, 5);
-		p.fillPath(path, QBrush(QColor(255, 0, 0, 75)));
-		p.drawLine(pt1, pt2);
-		p.drawEllipse(pt1, m.pt1.size, m.pt1.size);
-		p.drawEllipse(pt2, m.pt2.size, m.pt2.size);
-		color += 1024;
+		QPen pen;
+		pen.setStyle(Qt::SolidLine);
+		pen.setWidth(2);
+
+		int color = 0;
+		for (auto &m : _mt)
+		{
+			QColor c(color);
+			c.setAlpha(150);
+			pen.setColor(c);
+			p.setPen(pen);
+			auto pt1 = QPointF(m.pt1.x, m.pt1.y);
+			auto pt2 = QPointF(m.pt2.x + img1.width(), m.pt2.y);
+			QPainterPath path;
+			path.addEllipse(pt1, 5, 5);
+			path.addEllipse(pt2, 5, 5);
+			p.fillPath(path, QBrush(QColor(255, 0, 0, 75)));
+			p.drawLine(pt1, pt2);
+			p.drawEllipse(pt1, m.pt1.size, m.pt1.size);
+			p.drawEllipse(pt2, m.pt2.size, m.pt2.size);
+			color += 1024;
+		}
 	}
 
-	_result_view.setPixmap(QPixmap::fromImage(img));
+	auto g = ui.result_view->geometry();
+	auto w = g.width() - 2;
+	auto h = g.height() - 20;
+
+	QImage scaled_img;
+	view_options view_opt = static_cast<view_options>(ui.view_opt_list->currentIndex());
+	switch (view_opt)
+	{
+	case view_show_all:
+		scaled_img = img;
+		break;
+	case view_fit_height:
+		scaled_img = img.scaledToHeight(h);
+		break;
+	case view_fit_width:
+		scaled_img = img.scaledToWidth(w);
+		break;
+	case view_fit_both:
+		scaled_img = img.scaledToHeight(h);
+		scaled_img = scaled_img.scaledToWidth(w);
+		break;
+	}
+
+	_result_view.setPixmap(QPixmap::fromImage(scaled_img));
 	
 }
 
@@ -305,4 +337,24 @@ void imtools::right_sel_changed(int index)
 {
 	_right_img_file = ui.txt_right->text() + "/" + ui.right_img_list->itemText(index);
 	compare();
+}
+
+void imtools::view_opt_changed(int index)
+{
+	show_compare_result();
+}
+
+void imtools::resizeEvent(QResizeEvent *ev)
+{
+	show_compare_result();
+}
+
+void imtools::opt_show_mp_changed()
+{
+	show_compare_result();
+}
+
+void imtools::opt_show_kp_changed()
+{
+	show_compare_result();
 }
