@@ -3,10 +3,9 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_imtools.h"
-#include "imdiff_widget.h"
-#include "imextractor_widget.h"
-#include "imcounter_widget.h"
+#include "im_utility.h"
 
+#include <thread>
 #include <QVector>
 #include <memory>
 #include <QDragEnterEvent>
@@ -53,6 +52,7 @@ private:
 	void compare();
 	QString sel_folder();
 	void compare_proc(const std::string &left, const std::string &right, const iu::parameters &params);
+	void show_compare_result();
 	
 private:
 	Ui::imtoolsClass ui;
@@ -60,12 +60,15 @@ private:
 	iu::match_method _mm;
 	QStringList _left_imgs;
 	QStringList _right_imgs;
-	QImage _result_img;
+	//QImage _result_img;
 	QLabel _result_view;
 	QVector<std::shared_ptr<QWidget>> _dlgs;
 	QSignalMapper _signal_mapper;
 	QVector<QAction *> _ocl_dev_acts;
+	QString _left_img_file;
+	QString _right_img_file;
 	int _ocl_dev;
+	iu::matches _mt;
 };
 
 #endif // IMTOOLS_H

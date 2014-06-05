@@ -53,33 +53,6 @@
     <ClCompile Include="GeneratedFiles\qrc_imtools.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="imdiff_widget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_imdiff_widget.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_imdiff_widget.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="imextractor_widget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_imextractor_widget.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_imextractor_widget.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="imcounter_widget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_imcounter_widget.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_imcounter_widget.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="im_utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -94,36 +67,9 @@
     <CustomBuild Include="imtools.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="imdiff_widget.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="imdiff_widget.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="imextractor_widget.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="imextractor_widget.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="imcounter_widget.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="imcounter_widget.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_imtools.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_imdiff_widget.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_imextractor_widget.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_imcounter_widget.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="im_utility.h">

@@ -41,6 +41,8 @@ imtools::imtools(QWidget *parent)
 	ui.txt_left->setText(QDir::currentPath());
 	ui.txt_right->setText(QDir::currentPath());
 
+	ui.result_view->setWidget(&_result_view);
+
 	auto devs = iu::im_utility::ocl_devs();
 	for (auto &dev : devs)
 	{
@@ -92,20 +94,9 @@ void imtools::ocl_dev_changed(int index)
 
 void imtools::lock_ui(bool lock)
 {
-	ui.tab_diff->setEnabled(!lock);
+	ui.tabWidget->setEnabled(!lock);
+	//ui.result_view->setEnabled(!lock);
 }
-
-//void imtools::diff()
-//{
-//	iu::parameters params;
-//	params[iu::key_speedup] = _sm;
-//	params[iu::key_match_method] = _mm;
-//
-//	auto w = new imdiff_widget(ui.txt_left->text(), ui.txt_right->text(), params);
-//	w->setWindowTitle("diff");
-//	w->show();
-//	_dlgs.push_back(std::shared_ptr<QWidget>(w));
-//}
 
 void imtools::extract()
 {
@@ -121,7 +112,7 @@ void imtools::compare()
 {
 	lock_ui();
 
-	_result_img = QImage();
+	_result_view.setPixmap(QPixmap());
 
 	// get parameters
 	int left_idx = ui.left_img_list->currentIndex();
@@ -136,12 +127,18 @@ void imtools::compare()
 	using namespace iu;
 	parameters params;
 
-	auto left = (ui.txt_left->text() + "/" + ui.left_img_list->itemText(left_idx)).toStdString();
-	auto right = (ui.txt_right->text() + "/" + ui.right_img_list->itemText(right_idx)).toStdString();
+	auto left = _left_img_file.toStdString();
+	auto right = _right_img_file.toStdString();
+	if (!QFile::exists(left.c_str()) || !QFile::exists(right.c_str()))
+	{
+		emit sig_compare_done();
+		return;
+	}
 	params[key_speedup] = speedup_use_ocl;
 	params[key_match_method] = _mm;
+	params[key_ocl_dev] = _ocl_dev;
 
-	ui.title->setText("Analyzing, please wait...");
+	_result_view.setText("Analyzing, please wait...");
 	auto t = std::thread([&, left, right, params](){ compare_proc(left, right, params); });
 	t.detach();
 }
@@ -150,13 +147,26 @@ void imtools::compare_proc(const std::string &left, const std::string &right, co
 {
 	using namespace iu;
 	im_utility u;
-	auto mt = u.diff(left, right, params);
-	QImage img1(QString(left.c_str()));
-	QImage img2(QString(right.c_str()));
+	_mt = u.diff(left, right, params);
+	
+	emit sig_compare_done();
+}
+
+void imtools::compare_done()
+{
+	show_compare_result();
+	lock_ui(false);
+}
+
+void imtools::show_compare_result()
+{
+	QImage img1(_left_img_file);
+	QImage img2(_right_img_file);
 	QImage img(img1.width() + img2.width(), std::max(img1.height(), img2.height()), QImage::Format_ARGB32);
+	
+	if (img1.isNull() && img2.isNull()) return;
 
 	QPainter p(&img);
-
 	p.setRenderHint(QPainter::Antialiasing);
 	p.setRenderHint(QPainter::HighQualityAntialiasing);
 	p.drawImage(QPoint(0, 0), img1);
@@ -167,7 +177,7 @@ void imtools::compare_proc(const std::string &left, const std::string &right, co
 	pen.setWidth(2);
 
 	int color = 0;
-	for (auto &m : mt)
+	for (auto &m : _mt)
 	{
 		QColor c(color);
 		c.setAlpha(150);
@@ -185,15 +195,8 @@ void imtools::compare_proc(const std::string &left, const std::string &right, co
 		color += 1024;
 	}
 
-	_result_img = img;
-	emit sig_compare_done();
-}
-
-void imtools::compare_done()
-{
-	_result_view.setPixmap(QPixmap::fromImage(_result_img));
-	ui.result_view->setWidget(&_result_view);
-	lock_ui(false);
+	_result_view.setPixmap(QPixmap::fromImage(img));
+	
 }
 
 void imtools::opt_cpu(bool checked)
@@ -294,10 +297,12 @@ void imtools::dropEvent(QDropEvent *ev)
 
 void imtools::left_sel_changed(int index)
 {
+	_left_img_file = ui.txt_left->text() + "/" + ui.left_img_list->itemText(index);
 	compare();
 }
 
 void imtools::right_sel_changed(int index)
 {
+	_right_img_file = ui.txt_right->text() + "/" + ui.right_img_list->itemText(index);
 	compare();
 }

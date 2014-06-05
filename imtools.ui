@@ -327,7 +327,7 @@
                <number>0</number>
               </property>
               <property name="leftMargin">
-               <number>100</number>
+               <number>60</number>
               </property>
               <property name="topMargin">
                <number>0</number>
@@ -398,6 +398,20 @@
                  </size>
                 </property>
                </spacer>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBox_2">
+                <property name="text">
+                 <string>Show Key Points</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBox">
+                <property name="text">
+                 <string>Show Match Points</string>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QComboBox" name="comboBox">
@@ -646,16 +660,6 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item>
-        <widget class="QLabel" name="title">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
@@ -670,7 +674,7 @@
          <x>0</x>
          <y>0</y>
          <width>1022</width>
-         <height>612</height>
+         <height>625</height>
         </rect>
        </property>
       </widget>

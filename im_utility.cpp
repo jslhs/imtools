@@ -98,7 +98,14 @@ namespace iu
 		{
 			using namespace ocl;
 			DevicesInfo devs;
-			getOpenCLDevices(devs);
+			getOpenCLDevices(devs, CVCL_DEVICE_TYPE_GPU);
+
+			int dev = 0;
+			if (params.find(key_ocl_dev) != params.end())
+				dev = params.at(key_ocl_dev);
+
+ 			if (dev < 0 || dev >= devs.size()) dev = 0;
+			setDevice(devs[dev]);
 
 			SURF_OCL surf;
 			BFMatcher_OCL matcher;
@@ -221,7 +228,7 @@ namespace iu
 		ocl_dev_list devs;
 
 		cv::ocl::DevicesInfo info;
-		cv::ocl::getOpenCLDevices(info, cv::ocl::CVCL_DEVICE_TYPE_ALL);
+		cv::ocl::getOpenCLDevices(info, cv::ocl::CVCL_DEVICE_TYPE_GPU);
 
 		for (auto &i : info)
 		{
