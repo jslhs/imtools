@@ -160,23 +160,30 @@ void imtools::compare_proc(const std::string &left, const std::string &right, co
 
 void imtools::compare_done()
 {
+	QImage img1(_left_img_file);
+	QImage img2(_right_img_file);
+	QImage img(img1.width() + img2.width(), std::max(img1.height(), img2.height()), QImage::Format_ARGB32);
+
+	//if (img1.isNull() && img2.isNull()) return;
+	_left_img_width = img1.width();
+
+	QPainter p(&img);
+	
+	p.drawImage(QPoint(0, 0), img1);
+	p.drawImage(QPoint(_left_img_width, 0), img2);
+
+	_result_img = img;
+
 	show_compare_result();
 	lock_ui(false);
 }
 
 void imtools::show_compare_result()
 {
-	QImage img1(_left_img_file);
-	QImage img2(_right_img_file);
-	QImage img(img1.width() + img2.width(), std::max(img1.height(), img2.height()), QImage::Format_ARGB32);
-	
-	if (img1.isNull() && img2.isNull()) return;
-
+	auto img = _result_img;
 	QPainter p(&img);
 	p.setRenderHint(QPainter::Antialiasing);
 	p.setRenderHint(QPainter::HighQualityAntialiasing);
-	p.drawImage(QPoint(0, 0), img1);
-	p.drawImage(QPoint(img1.width(), 0), img2);
 
 	if (ui.opt_show_mp->isChecked())
 	{
@@ -192,7 +199,7 @@ void imtools::show_compare_result()
 			pen.setColor(c);
 			p.setPen(pen);
 			auto pt1 = QPointF(m.pt1.x, m.pt1.y);
-			auto pt2 = QPointF(m.pt2.x + img1.width(), m.pt2.y);
+			auto pt2 = QPointF(m.pt2.x + _left_img_width, m.pt2.y);
 			QPainterPath path;
 			path.addEllipse(pt1, 5, 5);
 			path.addEllipse(pt2, 5, 5);

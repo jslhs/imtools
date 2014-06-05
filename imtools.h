@@ -81,6 +81,7 @@ private:
 	QString _right_img_file;
 	int _ocl_dev;
 	iu::matches _mt;
+	int _left_img_width;
 	
 };
 
