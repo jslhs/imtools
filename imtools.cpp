@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QFileDialog>
 #include <QResizeEvent>
+#include <chrono>
 
 imtools::imtools(QWidget *parent)
 	: QMainWindow(parent)
@@ -119,6 +120,7 @@ void imtools::compare()
 
 	_result_view.setPixmap(QPixmap());
 	_mt = iu::matches();
+	_time_used_ms = 0;
 
 	// get parameters
 	int left_idx = ui.left_img_list->currentIndex();
@@ -152,9 +154,14 @@ void imtools::compare()
 void imtools::compare_proc(const std::string &left, const std::string &right, const iu::parameters &params)
 {
 	using namespace iu;
+	using namespace std;
+	using namespace chrono;
+
 	im_utility u;
-	_mt = u.diff(left, right, params);
-	
+	auto t0 = high_resolution_clock::now();
+	_mt = u.diff(left, right, params, &_left_kps, &_right_kps);
+	auto t = high_resolution_clock::now() - t0;
+	_time_used_ms = duration_cast<milliseconds>(t).count();
 	emit sig_compare_done();
 }
 
@@ -205,9 +212,30 @@ void imtools::show_compare_result()
 			path.addEllipse(pt2, 5, 5);
 			p.fillPath(path, QBrush(QColor(255, 0, 0, 75)));
 			p.drawLine(pt1, pt2);
-			p.drawEllipse(pt1, m.pt1.size, m.pt1.size);
-			p.drawEllipse(pt2, m.pt2.size, m.pt2.size);
+			p.drawEllipse(pt1, m.pt1.size / 2.0, m.pt1.size / 2.0);
+			p.drawEllipse(pt2, m.pt2.size / 2.0, m.pt2.size / 2.0);
 			color += 1024;
+		}
+	}
+
+	if (ui.opt_show_kp->isChecked())
+	{
+		auto draw_kp = [](QPainter &p, const iu::key_point &kp, int xoff){
+			double w = kp.size, h = w;
+			QRectF rc(kp.x - w / 2.0 + xoff, kp.y - h / 2.0, w, h);
+			p.drawRect(rc);
+		};
+
+		p.setPen(QColor(255, 0, 0));
+
+		for (auto &kp : _left_kps)
+		{
+			draw_kp(p, kp, 0);
+		}
+
+		for (auto &kp : _right_kps)
+		{
+			draw_kp(p, kp, _left_img_width);
 		}
 	}
 
@@ -233,6 +261,16 @@ void imtools::show_compare_result()
 		scaled_img = scaled_img.scaledToWidth(w);
 		break;
 	}
+
+	QPainter ps(&scaled_img);
+	ps.setPen(QColor(255, 255, 255));
+	QString str_time, str_kp, str_match;
+	str_time.sprintf("Time Used: %.2fs", _time_used_ms / 1000.0);
+	str_match.sprintf("Match Points: %d, Match Rate: %.2f%%", _mt.size(), _mt.size() * 100.0 / (double)_right_kps.size());
+	str_kp.sprintf("Key Points: %d / %d", _left_kps.size(), _right_kps.size());
+	ps.drawText(QPoint(0, 15), str_time);
+	ps.drawText(QPoint(0, 30), str_match);
+	ps.drawText(QPoint(0, 45), str_kp);
 
 	_result_view.setPixmap(QPixmap::fromImage(scaled_img));
 	

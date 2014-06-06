@@ -70,6 +70,8 @@ private:
 	Ui::imtoolsClass ui;
 	iu::speedup_method _sm;
 	iu::match_method _mm;
+	iu::key_points _left_kps;
+	iu::key_points _right_kps;
 	QStringList _left_imgs;
 	QStringList _right_imgs;
 	QImage _result_img;
@@ -82,7 +84,7 @@ private:
 	int _ocl_dev;
 	iu::matches _mt;
 	int _left_img_width;
-	
+	long long _time_used_ms;
 };
 
 #endif // IMTOOLS_H

@@ -107,8 +107,8 @@ namespace iu
  			if (dev < 0 || dev >= devs.size()) dev = 0;
 			setDevice(devs[dev]);
 
-			SURF_OCL surf;
-			BFMatcher_OCL matcher;
+			SURF_OCL surf(800.0);
+			BFMatcher_OCL matcher(NORM_L2);
 			oclMat desc1, desc2;
 			oclMat im1, im2;
 			im1 = imread(im_file1, CV_LOAD_IMAGE_GRAYSCALE);
