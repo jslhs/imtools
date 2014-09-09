@@ -267,21 +267,31 @@ void imtools::show_compare_result()
 	QFont font("Consolas");
 	font.setPixelSize(36);
 	ps.setFont(font);
-	QString str_time, str_kp, str_match;
+	QString str_time, str_kp, str_match, str_img;
 	str_time.sprintf("Time Used: %.2fs", _time_used_ms / 1000.0);
 	str_match.sprintf("Match Points: %d, Match Rate: %.2f%%", _mt.size(), _mt.size() * 100.0 / (double)_right_kps.size());
 	str_kp.sprintf("Key Points: %d(left) / %d(right)", _left_kps.size(), _right_kps.size());
+	QImage img1(_left_img_file);
+	QImage img2(_right_img_file);
+	str_img = QString("Image Size: %1x%2(left) / %3x%4(right)")
+		.arg(img1.width())
+		.arg(img1.height())
+		.arg(img2.width())
+		.arg(img2.height());
+
 	auto center = geometry().center();
 	center.rx() -= 150;
 	QPoint pt1 = QPoint(center.x(), 50);
 	QPoint pt2 = QPoint(center.x(), 100);
 	QPoint pt3 = QPoint(center.x(), 150);
+	QPoint pt4 = QPoint(center.x(), 200);
 	//ps.drawText(QPoint(0, 15), str_time);
 	//ps.drawText(QPoint(0, 30), str_match);
 	//ps.drawText(QPoint(0, 45), str_kp);
 	ps.drawText(pt1, str_time);
 	ps.drawText(pt2, str_match);
 	ps.drawText(pt3, str_kp);
+	ps.drawText(pt4, str_img);
 
 	_result_view.setPixmap(QPixmap::fromImage(scaled_img));
 	
