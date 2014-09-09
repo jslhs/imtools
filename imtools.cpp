@@ -264,13 +264,24 @@ void imtools::show_compare_result()
 
 	QPainter ps(&scaled_img);
 	ps.setPen(QColor(255, 255, 255));
+	QFont font("Consolas");
+	font.setPixelSize(36);
+	ps.setFont(font);
 	QString str_time, str_kp, str_match;
 	str_time.sprintf("Time Used: %.2fs", _time_used_ms / 1000.0);
 	str_match.sprintf("Match Points: %d, Match Rate: %.2f%%", _mt.size(), _mt.size() * 100.0 / (double)_right_kps.size());
-	str_kp.sprintf("Key Points: %d / %d", _left_kps.size(), _right_kps.size());
-	ps.drawText(QPoint(0, 15), str_time);
-	ps.drawText(QPoint(0, 30), str_match);
-	ps.drawText(QPoint(0, 45), str_kp);
+	str_kp.sprintf("Key Points: %d(left) / %d(right)", _left_kps.size(), _right_kps.size());
+	auto center = geometry().center();
+	center.rx() -= 150;
+	QPoint pt1 = QPoint(center.x(), 50);
+	QPoint pt2 = QPoint(center.x(), 100);
+	QPoint pt3 = QPoint(center.x(), 150);
+	//ps.drawText(QPoint(0, 15), str_time);
+	//ps.drawText(QPoint(0, 30), str_match);
+	//ps.drawText(QPoint(0, 45), str_kp);
+	ps.drawText(pt1, str_time);
+	ps.drawText(pt2, str_match);
+	ps.drawText(pt3, str_kp);
 
 	_result_view.setPixmap(QPixmap::fromImage(scaled_img));
 	
